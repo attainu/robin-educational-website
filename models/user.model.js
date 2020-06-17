@@ -34,6 +34,10 @@ const user = new userSchema({
     active: {
         type: Boolean,
         default: false
+    },
+    profilePicLink: {
+        type: String,
+        default: 'http://res.cloudinary.com/dqephruum/image/upload/v1592380257/doojzhewxigdpfgk6w2h.png'
     }
 });
 

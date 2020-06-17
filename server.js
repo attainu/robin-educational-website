@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import session from 'express-session';
 import passport from "passport";
+import upload from 'express-fileupload';
 import path from 'path';
 
 const __dirname = path.resolve();
@@ -43,6 +44,11 @@ app.use(session({
 // passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// setting file uploader
+app.use(upload({
+    useTempFiles: true
+}));
 
 
 // view engine

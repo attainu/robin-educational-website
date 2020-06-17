@@ -9,6 +9,8 @@ import { sendEmail } from "../utils/mailer.js";
 import { GMAIL_USER } from '../config/mailer.js';
 // email body
 import { verification, forgetPassword } from  "../utils/emailBody.js";
+// file upload cloudinary
+import uploadFile from '../utils/uploadPic.js';
 
 
 const userController = {};
@@ -24,7 +26,7 @@ userController.signin = async (req, res, next) => {
         user.key = key;
 
         // send mail
-        await sendEmail(GMAIL_USER, req.body.email, 'Please verify your email', verification(key));
+        sendEmail(GMAIL_USER, req.body.email, 'Please verify your email', verification(key));
 
         // saving user
         await user.save();
@@ -122,7 +124,7 @@ userController.forgetPassword = async (req, res, next) => {
         await user.save();
 
         // sending mail
-        await sendEmail(GMAIL_USER, email, 'FOR CREATING NEW PASSWORD', forgetPassword(key));
+        sendEmail(GMAIL_USER, email, 'FOR CREATING NEW PASSWORD', forgetPassword(key));
 
         res.render('emailSent');
     } catch (err) {
@@ -152,6 +154,28 @@ userController.makePassword = async (req, res, next) => {
         next(err);
     }
 };
+
+// upload file 
+userController.file = async (req, res, next) => {
+        try {
+            // checking if file uploaded
+            if(!req.files || !req.files.file) return res.redirect('/upload?noFile=true');
+            const file = req.files.file;
+
+            // checking if file is an image
+            if(!(file.mimetype.slice(0, 5) == 'image')) return res.redirect('/upload?noImage=true');
+
+            // uploading file to cloudinary
+            const result = await uploadFile(file.tempFilePath);
+
+            // saving link of profile photo in db
+            req.user.profilePicLink = result.url;
+            await req.user.save()
+            res.redirect('/users/details');
+        } catch(err) {
+            next(err);
+        }
+}
 
 
 export default userController;

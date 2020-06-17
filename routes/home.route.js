@@ -16,6 +16,7 @@ homeRoute.get("/login", homeController.login);
 homeRoute.get("/signin", homeController.sigin);
 homeRoute.get("/update", homeController.update);
 
+
 // admin routes
 homeRoute.get("/makeAdmin", homeController.newAdmin);
 
@@ -24,6 +25,13 @@ homeRoute.get("/makeAdmin", homeController.newAdmin);
 homeRoute.get("/forgetPassword", homeController.forgetPassword);
 // create password
 homeRoute.get('/makePassword', homeController.makePassword);
+
+
+// uploading pic
+homeRoute.get(
+    '/upload',
+    homeController.upload
+);
 
 
 export default homeRoute;

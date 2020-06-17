@@ -6,6 +6,8 @@ const adminController = {};
 
 // admin related routes
 
+// making admin
+
 // admin home
 adminController.home = (req, res) => {
     res.status(200).render('adminHome', {name: req.user.name, id: req.user._id});

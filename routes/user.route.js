@@ -93,5 +93,12 @@ userRoute.post(
     userController.makePassword
 );
 
+// upload pic
+userRoute.post(
+    '/file',
+    userAutherized,
+    userController.file
+);
+
 
 export default userRoute;

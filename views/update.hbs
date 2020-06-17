@@ -19,33 +19,33 @@
                             {{msg}}
                         </div>
                     {{/if}}
-                {{/if}}
+                {{/if}}  
                 <form action="/users/update" method="POST">
                     <label for="Name">
-                        Change Name:
-                        <input class="form-control" type="text" name="name" id="name">
+                        <input class="form-control" type="text" name="name" id="name" placeholder="Change Your Name">
                     </label>
                     <p></p>
                     <label for="Email id">
-                        Change Email:
-                        <input class="form-control" type="text" name="email" id="email">
+                        <input class="form-control" type="text" name="email" id="email" placeholder="Change Email">
                     </label>
                     <p></p>
                     <label for="password">
-                        Change Password:
-                        <input class="form-control" type="password" name="password" id="password">
+                        <input class="form-control" type="password" name="password" id="password" placeholder="Change Password">
                     </label>
                     <p></p>
                     <p></p>
                     <label for="oldPassword">
-                        Password:
-                        <input class="form-control" type="password" name="oldPassword" id="oldPassword">
+                        <input class="form-control" type="password" name="oldPassword" id="oldPassword" placeholder="Current Password">
                     </label>
                     <p></p>
                     <button class="btn btn-info" type="submit">update</button>
                 </form>
+                <p></p>
+                <form action="/upload" method="GET">
+                    <button class="btn btn-info" type="submit">change profile photo</button>
+                </form>
+                <p></p>
                 <form action="/users/home" method="GET">
-                    <p></p>
                     <button class="btn btn-info" type="submit">Home Page</button>
                 </form>
             </div>

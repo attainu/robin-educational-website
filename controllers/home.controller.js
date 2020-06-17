@@ -63,9 +63,23 @@ homeController.forgetPassword = (req, res) => {
 // create password
 homeController.makePassword = (req, res) => {
     if(req.query.error){
-        res.render('makePassword', {error: true});
+        return res.render('makePassword', {error: true});
     }
     res.render('makePassword')
+}
+
+
+// upload pic
+homeController.upload = (req, res) => {
+    if(req.query.noFile){
+        req.app.locals.msg = 'Please select a file'
+        return res.render('fileUpload', {error: true});
+    }
+    if(req.query.noImage){
+        req.app.locals.msg = "Please select a image file"
+        return res.render('fileUpload', {error: true});
+    }
+    res.render('fileUpload');
 }
 
 
