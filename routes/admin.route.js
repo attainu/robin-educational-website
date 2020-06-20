@@ -28,5 +28,14 @@ adminRoute.post(
     adminController.makeAdmin
 );
 
+// answering askMe(s)
+adminRoute.get(
+    "/askMe",
+    userAutherized,
+    isAdmin,
+    adminController.askMe
+);
+
+
 
 export default adminRoute;

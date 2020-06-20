@@ -3,7 +3,6 @@ import express from "express";
 import morgan from "morgan";
 import session from 'express-session';
 import passport from "passport";
-import upload from 'express-fileupload';
 import path from 'path';
 
 const __dirname = path.resolve();
@@ -22,6 +21,8 @@ import userRoute from "./routes/user.route.js";
 import homeRoute from "./routes/home.route.js";
 import adminRoute from "./routes/admin.route.js";
 import googleRoute from "./routes/google.route.js";
+import askMeRoute from "./routes/askMe.route.js";
+import faqRoute from "./routes/faqs.route.js";
 
 // init
 const app = express();
@@ -45,11 +46,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// setting file uploader
-app.use(upload({
-    useTempFiles: true
-}));
-
 
 // view engine
 app.set('views', path.join(__dirname, '/views'));
@@ -60,6 +56,8 @@ app.set('view engine', 'hbs');
 app.use('/users', userRoute);
 app.use('/admins', adminRoute);
 app.use('/google', googleRoute);
+app.use('/askMe', askMeRoute);
+app.use('/faqs', faqRoute);
 app.use('/', homeRoute);
 
 
@@ -72,6 +70,7 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res, next) => {
     console.log(err);
+    // if(err === 'not image') return res.redirect('/upload?noImage=true')
     res.status(404).json({
         data: [],
         mesage: 'error ocuured',

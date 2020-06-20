@@ -1,10 +1,9 @@
-import pkg from 'mongoose';
-const { Schema, model } = pkg;
+import mongoose from 'mongoose';
 
 import bcrypt from 'bcrypt';
 
 // schema
-const userSchema = Schema;
+const userSchema = mongoose.Schema;
 
 // defining
 const user = new userSchema({
@@ -25,8 +24,12 @@ const user = new userSchema({
         default: false
     },
     blogs: [{
-        type: userSchema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Blogs'
+    }],
+    questions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'askMe'
     }],
     key: {
         type: String
@@ -56,7 +59,7 @@ user.methods.isCorrectPassword = async function(password){
 
 
 // model
-const userModel = model("user", user);
+const userModel = mongoose.model("user", user);
 
 
 export default userModel;

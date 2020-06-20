@@ -1,9 +1,10 @@
 // importing package
 import mongoose from 'mongoose';
+import { MONGODB_URL } from "../config/mongoURL.js";
 
 
 // connecting to db
-mongoose.connect("mongodb://localhost/eduweb", {
+mongoose.connect(MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true

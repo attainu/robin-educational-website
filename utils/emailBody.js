@@ -23,3 +23,12 @@ export const forgetPassword = (key) => {
     <br/><br/>
     Have a good day!`;
 };
+
+
+export const askMeAnswer = () => {
+    return `Hi there,
+    <br/><br/>
+    We answered your question.
+    <br/><br/>
+    Have a good day!.`;
+}

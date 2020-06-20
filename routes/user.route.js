@@ -13,6 +13,9 @@ import  validators  from '../middlewares/validator/requestValidator.js';
 import userAutherized from "../middlewares/authorization/userAutherized.js";
 import checkPassword from '../middlewares/authorization/checkPassword.js';
 
+// multer upload middleware
+import { multerUploads, imageErrorHandler } from "../middlewares/uploader/multer.js";
+
 
 const userRoute = express.Router();
 
@@ -97,8 +100,18 @@ userRoute.post(
 userRoute.post(
     '/file',
     userAutherized,
+    multerUploads,
+    imageErrorHandler,
     userController.file
 );
+
+// ask question
+userRoute.get(
+    '/askMe',
+    userAutherized,
+    userController.askMe
+)
+
 
 
 export default userRoute;

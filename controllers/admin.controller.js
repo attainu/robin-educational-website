@@ -1,4 +1,5 @@
 import userModel from "../models/user.model.js";
+import askMeModel from "../models/askMe.model.js";
 
 
 const adminController = {};
@@ -31,6 +32,24 @@ adminController.makeAdmin = async (req, res, next) => {
         next(err);
     }
 };
+
+
+// AskMe portal
+adminController.askMe = async (req, res, next) => {
+    let error = false;
+    // checking if this is redirect
+    if(req.query.error) error = true;
+
+    // fetching all questions
+    try{
+        // finding questions that are not answered
+        const questions = await askMeModel.find({solved: false});
+        // response
+        res.render('adminAskMe', {questions, error})
+    } catch(err) {
+        next(err)
+    }
+}
 
 
 export default adminController;

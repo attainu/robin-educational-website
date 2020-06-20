@@ -11,6 +11,8 @@ import { GMAIL_USER } from '../config/mailer.js';
 import { verification, forgetPassword } from  "../utils/emailBody.js";
 // file upload cloudinary
 import uploadFile from '../utils/uploadPic.js';
+// data to string converter
+import dataToString from "../utils/dataTOstring.js";
 
 
 const userController = {};
@@ -158,24 +160,42 @@ userController.makePassword = async (req, res, next) => {
 // upload file 
 userController.file = async (req, res, next) => {
         try {
-            // checking if file uploaded
-            if(!req.files || !req.files.file) return res.redirect('/upload?noFile=true');
-            const file = req.files.file;
+            // checking if file provided
+            if(!req.file) return res.redirect('/upload?noFile=true');
 
-            // checking if file is an image
-            if(!(file.mimetype.slice(0, 5) == 'image')) return res.redirect('/upload?noImage=true');
+            // converting file into string
+            const file = dataToString(req);
 
-            // uploading file to cloudinary
-            const result = await uploadFile(file.tempFilePath);
+            // uploading on cloudinary
+            const result = await uploadFile(file);
 
-            // saving link of profile photo in db
+            // saving link of file in db
             req.user.profilePicLink = result.url;
             await req.user.save()
+
             res.redirect('/users/details');
         } catch(err) {
             next(err);
         }
-}
+};
+
+// ask me page 
+userController.askMe = async (req, res, next) => {
+    let error = false;
+    if(req.query.error)  error = true;
+    try {
+        console.log(req.user._id);
+        await userModel.findOne({_id: req.user._id})
+            .populate('questions')
+            // .sort('createdOn')
+            .exec()
+            .then(docs => {
+                res.render('AskMe', {user: req.user._id, questions: docs.questions, error});
+            });
+    } catch(err) {
+        next(err)
+    }
+};
 
 
 export default userController;
