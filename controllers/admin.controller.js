@@ -49,7 +49,17 @@ adminController.askMe = async (req, res, next) => {
     } catch(err) {
         next(err)
     }
-}
+};
+
+
+// delete blog page
+adminController.blog = (req, res) => {
+    let error = false;
+
+    if(req.query.error) error = true;
+
+    res.render('adminBlog', {error})
+};
 
 
 export default adminController;

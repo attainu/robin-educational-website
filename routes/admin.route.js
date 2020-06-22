@@ -37,5 +37,13 @@ adminRoute.get(
 );
 
 
+// for deleting blog page
+adminRoute.get(
+    "/blog",
+    userAutherized,
+    isAdmin,
+    adminController.blog
+);
+
 
 export default adminRoute;

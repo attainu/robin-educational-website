@@ -17,26 +17,26 @@
                 {{#if isAdmin}}
                 <form action="/admins/home" method="GET">
                     <p></p>
-                    <button class="btn btn-info" type="submit">Admin Page</button>
+                    <button class="btn btn-dark" type="submit">Admin Page</button>
                 </form>             
                 {{/if}}
-                {{!-- <form action="/blogs/show/?page=1" method="GET">
+                <form action="/blogs/show" method="GET">
                     <p></p>
-                    <button class="btn btn-info" type="submit">Your Blogs</button>
-                </form>                 --}}
+                    <button class="btn btn-primary" type="submit">Your Blogs</button>
+                </form>                
                 <form action="/users/details" method="GET">
                     <p></p>
                     <button class="btn btn-info" type="submit">Your Details</button>
                 </form>
                 <form action="/users/logout" method="GET">
                     <p></p>
-                    <button class="btn btn-info" type="submit">Log out</button>
+                    <button class="btn btn-warning" type="submit">Log out</button>
                 </form>
                 <p></p>
                 <p></p>
                 <form action="/users/askMe" method="GET">
                     <p></p>
-                    <button class="btn btn-info" type="submit">Have a doubt?</button>
+                    <button class="btn btn-light" type="submit">Have a doubt?</button>
                 </form>             
             </div>
         </div>

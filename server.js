@@ -22,6 +22,7 @@ import homeRoute from "./routes/home.route.js";
 import adminRoute from "./routes/admin.route.js";
 import googleRoute from "./routes/google.route.js";
 import askMeRoute from "./routes/askMe.route.js";
+import blogRoute from "./routes/blog.route.js";
 import faqRoute from "./routes/faqs.route.js";
 
 // init
@@ -58,6 +59,7 @@ app.use('/admins', adminRoute);
 app.use('/google', googleRoute);
 app.use('/askMe', askMeRoute);
 app.use('/faqs', faqRoute);
+app.use('/blogs', blogRoute);
 app.use('/', homeRoute);
 
 
@@ -70,7 +72,6 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res, next) => {
     console.log(err);
-    // if(err === 'not image') return res.redirect('/upload?noImage=true')
     res.status(404).json({
         data: [],
         mesage: 'error ocuured',
