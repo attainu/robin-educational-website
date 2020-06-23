@@ -1,5 +1,9 @@
 import userModel from "../models/user.model.js";
 import askMeModel from "../models/askMe.model.js";
+import blogModel from "../models/blogs.model.js";
+
+// for report making
+import { detailReport } from "../utils/detailReports.js";
 
 
 const adminController = {};
@@ -52,13 +56,68 @@ adminController.askMe = async (req, res, next) => {
 };
 
 
-// delete blog page
-adminController.blog = (req, res) => {
-    let error = false;
+// for getting all reports
+adminController.blog = async (req, res) => {
+    try{
+        // finding all blogs with reports more than or equal to 1
+        const blogs = await blogModel.find({noOreport: {$gte: 1}})
+            .populate('createdBy', 'name')
+        // will be ordered as number of reports.
+            .sort({'noOreport': 'desc'})
 
-    if(req.query.error) error = true;
+        // response
+        res.render('search', {data: blogs, admin: true})
+    } catch (err) {
+        next(err)
+    }
+};
 
-    res.render('adminBlog', {error})
+
+// see blog
+adminController.viewBlog = async(req, res, next) => {
+    const _id = req.query.blog;
+    try{
+        // finding blog
+        const blog = await blogModel.findOne({_id})
+            .populate('createdBy', 'name')
+
+        // if not found
+        if(!blog) return res.redirect('/');
+
+        // if found
+        // getting all reports
+        const report = detailReport(blog.report)
+
+        // response
+        res.render("adminBlog", {blog, report, admin: true});
+        
+    } catch(err) {
+        next(err);
+    }
+};
+
+
+// removing all reports
+adminController.removeReports = async (req, res, next) => {
+    try{
+        const _id = req.params.id;
+        // finding route
+        let blog = await blogModel.findOne({_id});
+
+        // removing reports
+        blog.report = [];
+        blog.noOreport = 0;
+
+        // saving 
+        blog = await blog.save()
+
+        console.log(blog)
+
+        // response
+        res.redirect('/admins/reports')
+    } catch(err) {
+        next(err);
+    }
 };
 
 

@@ -61,21 +61,27 @@ blogRoute.get(
 );
 
 
-// admin route
-blogRoute.post(
-    "/admin",
-    userAutherized,
-    isAdmin,
-    blogController.admin
-);
-
-
 // deleting
 blogRoute.get(
     "/adminDelete/:id",
     userAutherized,
     isAdmin,
     blogController.adminDelete
+);
+
+
+// report
+blogRoute.get(
+    "/report-page/:id",
+    userAutherized,
+    blogController.reportPage
+);
+
+
+blogRoute.post(
+    "/report/:id",
+    userAutherized,
+    blogController.report
 );
 
 

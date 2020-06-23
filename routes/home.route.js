@@ -6,7 +6,7 @@ import homeController from '../controllers/home.controller.js';
 
 // routing
 const homeRoute = express.Router();
-
+ 
 
 // paths
 
@@ -33,5 +33,15 @@ homeRoute.get(
     homeController.upload
 );
 
+
+// for searching all blogs related to user input
+homeRoute.post(
+    "/search",
+    homeController.search
+);
+
+
+// for rendering specific blog
+homeRoute.get("/blog-search", homeController.viewBlog);
 
 export default homeRoute;

@@ -14,12 +14,29 @@
                 <h2>YOU ARE AUTHERIZED</h2>
                 <h4>Hello {{name}}</h4>
                 <hr>
+                {{#if error}}
+                    {{msg}}
+                {{/if}}
+                <form action="/search" method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <label for="word">
+                                <input class="form-control" type="text" name="word" id="word" placeholder="Enter Topic/Blog Name">
+                            </label>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary btn-sm" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form> 
+                <hr>
                 {{#if isAdmin}}
                 <form action="/admins/home" method="GET">
                     <p></p>
                     <button class="btn btn-dark" type="submit">Admin Page</button>
                 </form>             
                 {{/if}}
+                <p></p>
                 <form action="/blogs/show" method="GET">
                     <p></p>
                     <button class="btn btn-primary" type="submit">Your Blogs</button>

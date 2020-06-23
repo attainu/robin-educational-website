@@ -22,7 +22,7 @@ const askMe = new askMeSchema({
         type: Boolean,
         default: false
     },
-    createdOn: {
+    createdAt: {
         type: Date,
         default: new Date()
     }

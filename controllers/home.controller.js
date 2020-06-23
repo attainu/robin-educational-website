@@ -1,3 +1,5 @@
+import blogModel from "../models/blogs.model.js"
+
 const homeController = {};
 
 // user related
@@ -66,7 +68,7 @@ homeController.makePassword = (req, res) => {
         return res.render('makePassword', {error: true});
     }
     res.render('makePassword')
-}
+};
 
 
 // upload pic
@@ -80,7 +82,60 @@ homeController.upload = (req, res) => {
         return res.render('fileUpload', {error: true});
     }
     res.render('fileUpload');
-}
+};
+
+
+// For search all data specific to user input
+homeController.search = async (req, res) => {
+    let word = req.body.word;
+    word = word.trim();
+
+    let data1 = [], data2 = [];
+
+    if(word) {
+        // if word match title
+        data1 = await blogModel.find({title: word})
+        .populate('createdBy', 'name')
+    
+        // if word matches partially
+        data2 = await blogModel.find({title: {$regex: word, $options: "i"}})
+            .populate('createdBy', 'name')
+            .sort({title: -1})
+    }
+
+    
+    console.log(data1, data2)
+
+    // merging both in one
+    const data = [...data1, ...data2];
+
+    // response
+    res.render("search", {data});
+};
+
+
+// rendering specific blog
+homeController.viewBlog = async(req, res, next) => {
+    const _id = req.query.blog;
+    try{
+        // finding blog
+        const blog = await blogModel.findOne({_id})
+            .populate('createdBy', 'name')
+
+        // if not found
+        if(!blog) return res.redirect('/');
+
+        // checking if user is authorized
+        let user = false;
+        if(req.user && Object.keys(req.user).length != 0) user = true;
+
+        // if found
+        res.render("blog", {blog, user});
+        
+    } catch(err) {
+        next(err);
+    }
+};
 
 
 export default homeController;

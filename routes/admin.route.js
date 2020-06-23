@@ -37,12 +37,30 @@ adminRoute.get(
 );
 
 
-// for deleting blog page
+// for getting all reports
 adminRoute.get(
-    "/blog",
+    "/reports",
     userAutherized,
     isAdmin,
     adminController.blog
+);
+
+
+// for blog which is searched by admin
+adminRoute.get(
+    "/blog-search/",
+    userAutherized,
+    isAdmin,
+    adminController.viewBlog
+);
+
+
+// for removing reports
+adminRoute.get(
+    "/remove-reports/:id",
+    userAutherized,
+    isAdmin,
+    adminController.removeReports
 );
 
 

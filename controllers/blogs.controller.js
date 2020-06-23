@@ -126,38 +126,43 @@ blogController.edit = async (req, res, next) => {
 };
 
 
-// for admin
-blogController.admin = (req, res, next) => {
-    try{
-        const email = req.body.email;
-
-        userModel.findOne({email})
-            .populate('blogs') 
-            .exec()
-            .then(user => {
-                if(!user) throw "User not found";
-                return user.blogs
-            })
-            .then(blogs => blogs.sort(order('createdOn', -1)))
-            .then(blogs => res.render('showBlogs', {admin: true, blogs}));
-
-    } catch (err) {
-        if(err === 'User not found') return res.redirect("/admins/blog?error=true");
-        next(err)
-    }
-};
-
-
-// deleting
+// deleting blog
 blogController.adminDelete = async (req, res, next) => {
     try{
         const _id = req.params.id;
         // deleting
         await blogModel.findOneAndRemove({_id});
         // redirecting
-        res.redirect('/admins/blog');
+        res.redirect('/admins/reports');
     } catch (err) {
         next(err);
+    }
+};
+
+
+// report
+blogController.reportPage = (req, res) => {
+    const id = req.params.id;
+
+    res.render('report', {id});
+};
+
+
+blogController.report = async(req, res, next) => {
+    try{
+        const _id = req.params.id;
+        const key = req.body.report;
+        // finding blog
+        const blog = await blogModel.findOne({_id});
+        // reporting
+        blog.report.push(key);
+        blog.noOreport += 1;
+        // saving
+        await blog.save()
+        // response
+        res.render("reported")
+    } catch (err) {
+        next(err)
     }
 };
 

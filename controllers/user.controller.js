@@ -85,7 +85,9 @@ userController.details = (req, res) => {
 
 // home page
 userController.home = (req, res) => {
-    res.status(200).render('userHome', { name: req.user.name, isAdmin: req.user.admin });
+    let error = false;
+    if(req.query.error) error = true;
+    res.status(200).render('userHome', { name: req.user.name, isAdmin: req.user.admin, error });
 };
 
 // logout
