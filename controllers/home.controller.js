@@ -86,31 +86,33 @@ homeController.upload = (req, res) => {
 
 
 // For search all data specific to user input
-homeController.search = async (req, res) => {
-    let word = req.body.word;
-    word = word.trim();
-
-    let data1 = [], data2 = [];
-
-    if(word) {
-        // if word match title
-        data1 = await blogModel.find({title: word})
-        .populate('createdBy', 'name')
+homeController.search = async (req, res, next) => {
+    try{
+        // removing white spaces
+        let word = req.body.word;
+        word = word.trim();
     
-        // if word matches partially
-        data2 = await blogModel.find({title: {$regex: word, $options: "i"}})
+        let data = [];
+    
+        if(word) {
+            // if word match title
+            data = await blogModel.find({
+                $or: [
+                    {title: word},
+                    {title: {$regex: word, $options: "i"}}
+                ]
+            })
             .populate('createdBy', 'name')
-            .sort({title: -1})
+            .sort({'title': 'desc'})
+            .exec()
+        }
+    
+        // response
+        res.render("search", {data});
+    } catch (err) {
+        next(err);
     }
 
-    
-    console.log(data1, data2)
-
-    // merging both in one
-    const data = [...data1, ...data2];
-
-    // response
-    res.render("search", {data});
 };
 
 
