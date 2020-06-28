@@ -160,18 +160,29 @@ blogController.report = async(req, res, next) => {
 // getting all review
 blogController.getAllReviews = async (req, res, next) => {
     try{
+        // checking for error in creating review
+        let error = false;
+        if(req.query.error) error = true
+        
         // finding blog and populating all reviews
         const _id = req.params.id;
         const blog = await blogModel.findOne({_id}).populate("reviews");
 
-        // checking if blog created by same user
-        let isSame = false;
-        if(blog.createdBy === req.user._id) isSame = true;
+        // checking if user is autherized or not
+        let user = false;
+        if(req.user && req.user.name) user = true;
 
-        console.log(isSame)
+        // page object
+        const temObj = {
+            reviews: blog.reviews, 
+            title: blog.title, 
+            blogID: _id, user,
+            error
+        };
+        
         
         // response
-        res.status(200).render('reviews', {reviews: blog.reviews, title: blog.title, blogID: _id, user});
+        res.status(200).render('reviews', temObj);
 
 }catch(err){
 next(err);
