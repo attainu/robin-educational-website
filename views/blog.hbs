@@ -17,6 +17,7 @@
                 <p>created on {{blog.createdOn}}</p>
                 <p></p>
                 <p>{{blog.body}}</p>
+                <p></p>
             </div>
             {{#if user}}
                 <div class="row">
@@ -24,6 +25,12 @@
                         <form action="/blogs/report-page/{{blog._id}}" method="GET">
                             <p></p>
                             <button class="btn btn-outline-danger" type="submit">Report</button>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <form action="/blogs/reviews/{{blog._id}}" method="GET">
+                            <p></p>
+                            <button class="btn btn-outline-info" type="submit">Reviews</button>
                         </form>
                     </div>
                 </div>

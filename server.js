@@ -26,6 +26,7 @@ import googleRoute from "./routes/google.route.js";
 import askMeRoute from "./routes/askMe.route.js";
 import blogRoute from "./routes/blog.route.js";
 import faqRoute from "./routes/faqs.route.js";
+import reviewRouter from "./routes/reviewRoutes.js";
 
 // init
 const app = express();
@@ -63,6 +64,7 @@ app.use('/askMe', askMeRoute);
 app.use('/faqs', faqRoute);
 app.use('/blogs', blogRoute);
 app.use('/', homeRoute);
+app.use('/reviews', reviewRouter);
 
 
 // 404 error
@@ -74,6 +76,7 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res, next) => {
     if(err.message == 'Path is not defined') return res.status(404).render('notFound');
+    console.log(err)
     res.status(500).render('serverError');
 });
 

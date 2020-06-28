@@ -25,6 +25,11 @@
                     <p>{{blog.body}}</p>
                     <hr>
                     <p>tag: {{blog.tag}}</p>
+                    <p></p>
+                    <form action="/blogs/reviews/{{blog._id}}" method="GET">
+                        <button class="btn btn-outline-info" type="submit">Reviews</button>
+                    </form>
+                    <p></p>
                     <div class="row">
                         <div class="col">
                             <form action="/blogs/edit/{{blog._id}}" method="GET">

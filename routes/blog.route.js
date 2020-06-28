@@ -99,4 +99,10 @@ blogRoute.post(
 );
 
 
+blogRoute.get(
+    "/reviews/:id",
+    blogController.getAllReviews
+);
+
+
 export default blogRoute;
