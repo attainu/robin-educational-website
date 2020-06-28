@@ -53,12 +53,31 @@ userRoute.post(
     userController.update
 );
 
+
+// change email address
+userRoute.post(
+    "/change-email",
+    userAutherized,
+    validators.emailChecker,
+    validators.emailError,
+    userController.changeEmail
+);
+
+
+// verify-email 
+userRoute.get(
+    "/email-verify/:key",
+    userController.verifyEmail
+);
+
+
 // user details
 userRoute.get(
     '/details',
     userAutherized,
     userController.details
 );
+
 
 // user home page
 userRoute.get(
@@ -67,12 +86,14 @@ userRoute.get(
     userController.home
 );
 
+
 // logout
 userRoute.get(
     '/logout',
     userAutherized,
     userController.logout
 );
+
 
 // delete 
 userRoute.get(
@@ -81,11 +102,13 @@ userRoute.get(
     userController.delete
 );
 
+
 // forget password
 userRoute.post(
     '/forgetPassword',
     userController.forgetPassword
 );
+
 
 // make new password
 userRoute.post(
@@ -96,6 +119,7 @@ userRoute.post(
     userController.makePassword
 );
 
+
 // upload pic
 userRoute.post(
     '/file',
@@ -105,13 +129,13 @@ userRoute.post(
     userController.file
 );
 
+
 // ask question
 userRoute.get(
     '/askMe',
     userAutherized,
     userController.askMe
-)
-
+);
 
 
 export default userRoute;

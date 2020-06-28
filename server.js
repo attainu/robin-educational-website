@@ -4,6 +4,8 @@ import morgan from "morgan";
 import session from 'express-session';
 import passport from "passport";
 import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const __dirname = path.resolve();
 
@@ -71,14 +73,11 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(404).json({
-        data: [],
-        mesage: 'error ocuured',
-        error: {message: err.message}
-    });
+    if(err.message == 'Path is not defined') return res.status(404).render('notFound');
+    res.status(500).render('serverError');
 });
 
 
 // listening
-app.listen(3000, console.log("server is runnning...")); 
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, console.log(`server is runnning on ${PORT}...`)); 

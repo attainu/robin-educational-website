@@ -16,8 +16,8 @@ const blog = new blogSchema({
         required: true
     },
     createdOn: {
-        type: Date,
-        default: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+        type: String,
+        default: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -36,13 +36,6 @@ const blog = new blogSchema({
         default: 0
     }
 });
-
-// new Date().toISOString().
-//   replace(/T/, ' ').      // replace T with a space
-//   replace(/\..+/, '')     // delete the dot and everything after
-// > '2012-11-04 14:55:45'
-// new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
-
 
 
 //model

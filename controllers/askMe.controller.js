@@ -55,6 +55,18 @@ askMeController.answer = async (req, res, next) => {
         next(err);
     }
 };
+
+
+askMeController.delete = async(req, res, next) => {
+    try{
+        const _id = req.params.id;
+        const question = await askMeModel.findOneAndRemove({_id});
+        // response
+        res.redirect("/users/askMe");
+    } catch(err) {
+        next(err);
+    }
+}
  
 
 // exporting files

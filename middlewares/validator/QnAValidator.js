@@ -59,7 +59,7 @@ export const faqCreateError = (req, res, next) => {
         // response
         res.redirect("/faqs/new?error=true");
     }
-}
+};
 
 // update check and error
 
@@ -82,7 +82,7 @@ export const checkBody = async(req, res, next) => {
             .run(req)
     };
     next();
-}
+};
 
 
 export const faqUpdateError = (req, res, next) => {
@@ -96,4 +96,4 @@ export const faqUpdateError = (req, res, next) => {
         // response
         res.redirect(`/faqs/edit/${req.params.id}?error=true`);
     }
-}
+};

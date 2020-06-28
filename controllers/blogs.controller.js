@@ -33,20 +33,14 @@ blogController.create = async (req, res, next) => {
 // blog show
 blogController.show = (req, res, next) => {
     try{
-        let self = false;
-        let admin = false;
-
-        const _id = req.user._id || req.query.userID;
-
-        if (!req.body.userID) self = true;
-        if (req.body.userID) admin = true;
+        const _id = req.user._id
 
         userModel.findOne({_id})
             .populate('blogs') 
             .exec()
             .then(user => user.blogs)
             .then(blogs => blogs.sort(order('createdOn', -1)))
-            .then(blogs => res.render('showBlogs', {self, admin, blogs}));
+            .then(blogs => res.render('usersBlog', {blogs}));
 
     } catch (err) {
         next(err)
@@ -54,23 +48,23 @@ blogController.show = (req, res, next) => {
 };
 
 
+// showing specific blog
+blogController.blog = (req, res, next) => {
+    // rendering page
+    res.render('showBlog', {blog: req.blog});
+}
+
+
 // blog update
 blogController.update = async (req, res, next) => {
     try {
-        // finding blog
-        const _id = req.params.id
-        const blog = await blogModel.findOne({_id});
-
-        // if not found
-        if(!blog) {};
-
         // updating
-        if(req.body.title) blog.title = req.body.title;
-        if(req.body.body) blog.body = req.body.body;
-        if(req.body.tag) blog.tag = req.body.tag;
+        if(req.body.title) req.blog.title = req.body.title;
+        if(req.body.body) req.blog.body = req.body.body;
+        if(req.body.tag) req.blog.tag = req.body.tag;
 
         // saving details
-        await blog.save()
+        await req.blog.save()
 
         // redirecting
         res.redirect("/blogs/show");
@@ -85,7 +79,7 @@ blogController.delete = async (req, res, next) => {
     try{
         const _id = req.params.id;
         // deleting
-        await blogModel.findOneAndRemove({_id});
+        await req.blog.remove()
         // redirecting
         res.redirect('/blogs/show');
     } catch (err) {
@@ -111,18 +105,14 @@ blogController.edit = async (req, res, next) => {
     let error = false;
     if(req.query.error) error = true;
 
-    const _id = req.params.id;
-    // finding blog
-    const blog = await blogModel.findOne({_id});
-
     // if not found 
-    if(!blog) {
+    if(!req.blog) {
         req.app.locals.msg = 'Blog not found';
         error = true;
     };
 
     // if found
-    res.render("editBlog", {blog, error});
+    res.render("editBlog", {blog: req.blog, error});
 };
 
 

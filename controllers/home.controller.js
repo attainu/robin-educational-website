@@ -1,4 +1,5 @@
-import blogModel from "../models/blogs.model.js"
+import blogModel from "../models/blogs.model.js";
+import { pagination } from "../utils/pagination.js";
 
 const homeController = {};
 
@@ -43,6 +44,16 @@ homeController.update = (req, res) => {
 };
 
 
+// change email page 
+homeController.changeEmail = (req, res) => {
+    // check for error
+    let error = false;
+    if(req.query.error) error = true;
+
+    res.render('changeEmail', {error});
+};
+
+
 //admin related 
 homeController.newAdmin = (req, res) => {
     if(req.query.notfound){
@@ -68,7 +79,7 @@ homeController.makePassword = (req, res) => {
         return res.render('makePassword', {error: true});
     }
     res.render('makePassword')
-};
+}
 
 
 // upload pic
@@ -88,6 +99,10 @@ homeController.upload = (req, res) => {
 // For search all data specific to user input
 homeController.search = async (req, res, next) => {
     try{
+         // for pagination
+         const limit = 10;
+         const page = req.query.page || 1;
+
         // removing white spaces
         let word = req.body.word;
         word = word.trim();
@@ -105,10 +120,23 @@ homeController.search = async (req, res, next) => {
             .populate('createdBy', 'name')
             .sort({'title': 'desc'})
             .exec()
-        }
-    
+        };
+
+        // details for pagination
+        const { firstPage, endPage } = await pagination(
+            blogModel, 
+            {
+                $or: [
+                    {title: word},
+                    {title: {$regex: word, $options: "i"}}
+                ]
+            },
+            page,
+            limit
+        );
+
         // response
-        res.render("search", {data});
+        res.render("search", {data, firstPage, endPage, prevPage: page-1, nextPage: page+1});
     } catch (err) {
         next(err);
     }
@@ -125,7 +153,7 @@ homeController.viewBlog = async(req, res, next) => {
             .populate('createdBy', 'name')
 
         // if not found
-        if(!blog) return res.redirect('/');
+        if(!blog) return res.status(404).render("notfound");
 
         // checking if user is authorized
         let user = false;

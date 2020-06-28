@@ -25,7 +25,6 @@ const bodyChecker = [
 
 // for update
 const checkForOne = oneOf([
-    check('email').exists().not().isEmpty(),
     check('password').exists().not().isEmpty(),
     check('name').exists().not().isEmpty()
 ], 'Please provide atleast one field');
@@ -44,14 +43,17 @@ const updateBodyChecker = async(req, res, next) => {
                 .isLength({min: 5}).withMessage('Password must be atleast 5 char long.')
                 .run(req);
     }
-    if(req.body.email){
-        await check('email')
-                .isEmail().withMessage('please give valid email address')   
-                .custom(isUniqEmail).withMessage('Email Already in Use. Please provide another')
-                .run(req);
-    }
     next();
 };
+
+
+// email checker
+const emailChecker = [
+    check('email')
+        .isEmail().withMessage('please give valid email address')   
+        .custom(isUniqEmail).withMessage('Email Already in Use. Please provide another')
+];
+
 
 // password checker
 const keyNpassword = [
@@ -90,6 +92,18 @@ const updateError = (req, res, next) => {
 };
 
 
+// email error
+const emailError = (req, res, next) => {
+    try{
+        validationResult(req).throw();
+        next();
+    } catch(err) {
+        req.app.locals.msg = err.array()[0].msg;
+        res.redirect('/change-email?error=true');
+    }
+};
+
+
 const keyError = (req, res, next) => {
     try{
         validationResult(req).throw();
@@ -104,9 +118,11 @@ const keyError = (req, res, next) => {
 const validators = {
     bodyChecker,
     keyNpassword,
+    emailChecker,
     siginError,
     checkForOne,
     updateBodyChecker,
+    emailError,
     updateError,
     keyError
 };

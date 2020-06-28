@@ -1,5 +1,5 @@
 // importing modules
-import randomString from 'randomString';
+import randomString from 'randomstring';
 
 // user model
 import userModel from "../models/user.model.js"
@@ -8,7 +8,7 @@ import { sendEmail } from "../utils/mailer.js";
 // mail config file
 import { GMAIL_USER } from '../config/mailer.js';
 // email body
-import { verification, forgetPassword } from  "../utils/emailBody.js";
+import { verification, forgetPassword, changeMail } from  "../utils/emailBody.js";
 // file upload cloudinary
 import uploadFile from '../utils/uploadPic.js';
 // data to string converter
@@ -32,7 +32,7 @@ userController.signin = async (req, res, next) => {
 
         // saving user
         await user.save();
-        res.status(200).redirect("/login?registered=true");
+        res.status(200).render('emailSent', {reason: 'account verification, please activate your account before login.'})
     } catch (err) {
         next(err);
     }
@@ -75,6 +75,49 @@ userController.update = async (req, res, next) => {
     }
 };
 
+
+// change email address
+userController.changeEmail = async(req, res, next) => {
+    try{
+        const email = req.body.email;
+        const key = randomString.generate();
+        // putting key in user data
+        req.user.key = key;
+        await req.user.save()
+        // putting mail in session
+        req.session.userEmail = email;
+        // sending mail
+        sendEmail(GMAIL_USER, email, "For change of email", changeMail(key));
+        // response
+        res.render('emailSent', {reason: "changing email"})
+    } catch(err) {
+        next(err);
+    }
+};
+
+
+// verify email
+userController.verifyEmail = async(req, res, next) => {
+    try{
+        const key = req.params.key;
+        // retrieving email
+        const email = req.session.userEmail
+        // searching user based on key
+        const user = await userModel.findOne({key});
+        // if not found
+        if(!user) return res.redirect(404, "/");
+        // if found updating email
+        console.log(email)
+        user.email = email;
+        await user.save()
+        // response
+        res.redirect('/users/details');
+    } catch(err) {
+        next(err);
+    }
+};
+
+
 // user details
 userController.details = (req, res) => {
     if (req.query.updated) {
@@ -83,12 +126,12 @@ userController.details = (req, res) => {
     res.status(200).render('userProfile', { user: req.user });
 };
 
+
 // home page
 userController.home = (req, res) => {
-    let error = false;
-    if(req.query.error) error = true;
-    res.status(200).render('userHome', { name: req.user.name, isAdmin: req.user.admin, error });
+    res.status(200).render('userHome', { name: req.user.name, isAdmin: req.user.admin });
 };
+
 
 // logout
 userController.logout = (req, res) => {
@@ -96,6 +139,7 @@ userController.logout = (req, res) => {
     req.session.destroy();
     res.redirect('/login');
 };
+
 
 // deleting account
 userController.delete = async (req, res, next) => {
@@ -108,6 +152,7 @@ userController.delete = async (req, res, next) => {
         next(err);
     }
 };
+
 
 // forget password route control
 userController.forgetPassword = async (req, res, next) => {
@@ -130,11 +175,12 @@ userController.forgetPassword = async (req, res, next) => {
         // sending mail
         sendEmail(GMAIL_USER, email, 'FOR CREATING NEW PASSWORD', forgetPassword(key));
 
-        res.render('emailSent');
+        res.render('emailSent', {reason: 'password recovery'});
     } catch (err) {
         next(err);
     }
 };
+
 
 // make password
 userController.makePassword = async (req, res, next) => {
@@ -159,6 +205,7 @@ userController.makePassword = async (req, res, next) => {
     }
 };
 
+
 // upload file 
 userController.file = async (req, res, next) => {
         try {
@@ -179,7 +226,8 @@ userController.file = async (req, res, next) => {
         } catch(err) {
             next(err);
         }
-};
+}
+
 
 // ask me page 
 userController.askMe = async (req, res, next) => {

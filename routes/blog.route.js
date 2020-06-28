@@ -3,6 +3,7 @@ import blogController from "../controllers/blogs.controller.js";
 // autherization
 import userAutherized from "../middlewares/authorization/userAutherized.js";
 import isAdmin from "../middlewares/authorization/isAdmin.js";
+import { isSelf } from "../middlewares/authorization/isSelf.js"
 // validator
 import { bodyChecker, checkForOne, updateBodyChecker, createError, updateError } from "../middlewares/validator/blogValidator.js"
 
@@ -21,16 +22,27 @@ blogRoute.post(
     blogController.create
 );
 
-// show blogs
+// show all user`s blogs
 blogRoute.get(
     "/show",
+    userAutherized,
     blogController.show
+);
+
+
+//showing specific blog
+blogRoute.get(
+    "/blog-search/:id",
+    userAutherized,
+    isSelf,
+    blogController.blog
 );
 
 // update blog
 blogRoute.post(
     "/update/:id",
     userAutherized,
+    isSelf,
     checkForOne,
     updateBodyChecker,
     updateError,
@@ -41,6 +53,7 @@ blogRoute.post(
 blogRoute.get(
     "/delete/:id",
     userAutherized,
+    isSelf,
     blogController.delete
 );
 
@@ -57,6 +70,7 @@ blogRoute.get(
 blogRoute.get(
     "/edit/:id",
     userAutherized,
+    isSelf,
     blogController.edit
 );
 

@@ -2,9 +2,6 @@ import userModel from "../models/user.model.js";
 import askMeModel from "../models/askMe.model.js";
 import blogModel from "../models/blogs.model.js";
 
-// for report making
-import { detailReport } from "../utils/detailReports.js";
-
 
 const adminController = {};
 
@@ -47,7 +44,9 @@ adminController.askMe = async (req, res, next) => {
     // fetching all questions
     try{
         // finding questions that are not answered
-        const questions = await askMeModel.find({solved: false});
+        const questions = await askMeModel.find({solved: false})
+                            .populate('user', 'name')
+                            .exec();
         // response
         res.render('adminAskMe', {questions, error})
     } catch(err) {
@@ -57,7 +56,7 @@ adminController.askMe = async (req, res, next) => {
 
 
 // for getting all reports
-adminController.blog = async (req, res) => {
+adminController.blog = async (req, res, next) => {
     try{
         // finding all blogs with reports more than or equal to 1
         const blogs = await blogModel.find({noOreport: {$gte: 1}})

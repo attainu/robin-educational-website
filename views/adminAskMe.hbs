@@ -27,13 +27,15 @@
                     {{#each questions}}
                         <li>
                             <h4><b>{{this.question}}</b></h4>
+                            <p>asked by: {{this.user.name}}</p>
                             <form action="/askMe/answer/{{this._id}}" method="POST">
-                                <label for="email">
+                                <label for="answer">
                                     <input class="form-control" type="text" name="answer" id="answer" placeholder="give answer" required>
                                 </label>
                                 <p></p>
                                 <button class="btn btn-info" type="submit">Submit</button>
                             </form>
+                            <hr>
                         </li>
                     {{/each}}
                 </ul>

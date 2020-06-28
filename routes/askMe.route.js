@@ -36,5 +36,13 @@ askMeRoute.post(
 );
 
 
+// delete question
+askMeRoute.get(
+    "/delete/:id",
+    userAutherized,
+    askMeController.delete
+);
+
+
 // exporting file
 export default askMeRoute;

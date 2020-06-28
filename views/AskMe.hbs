@@ -37,13 +37,16 @@
                     <ul class="list">
                         {{#each questions}}
                             <li>
-                                <h4><b>{{this.question}}</b></h4>
+                                <h6><b>{{this.question}}</b></h6>
                                 <p>created on {{this.createdAt}}</p>
                                 {{#if this.solved}}
-                                    <h4>{{this.answer}}</h4>
+                                    <p>{{this.answer}}</p>
                                 {{else}}
-                                    <h4>Question not solved yet.</h4>
+                                    <p><b>Question not answered yet.</b></p>
                                 {{/if}}
+                                <form action="/askMe/delete/{{this._id}}" method="GET">
+                                    <button class="btn btn-danger" type="submit">delete</button>
+                                </form> 
                             </li>
                         {{/each}}
                     </ul>

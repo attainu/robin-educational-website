@@ -6,7 +6,7 @@ import homeController from '../controllers/home.controller.js';
 
 // routing
 const homeRoute = express.Router();
- 
+
 
 // paths
 
@@ -15,6 +15,7 @@ homeRoute.get("/", homeController.home);
 homeRoute.get("/login", homeController.login);
 homeRoute.get("/signin", homeController.sigin);
 homeRoute.get("/update", homeController.update);
+homeRoute.get("/change-mail", homeController.changeEmail);
 
 
 // admin routes
@@ -43,5 +44,6 @@ homeRoute.post(
 
 // for rendering specific blog
 homeRoute.get("/blog-search", homeController.viewBlog);
+
 
 export default homeRoute;
