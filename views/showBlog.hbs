@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{blog.title}}|EduWeb</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="offset-md-4 col-md-4">
+                <hr>
+                <h2>BLOGs</h2>
+                {{#if error}}
+                <div class="alert alert-danger">
+                    {{msg}}
+                </div>
+                {{/if}}
+                {{#if blog}}
+                    <h5><b>{{blog.title}}</b></h5>
+                    <p>created on {{blog.createdOn}}</p>
+                    <hr>
+                    <p>{{blog.body}}</p>
+                    <hr>
+                    <p>tag: {{blog.tag}}</p>
+                    <p></p>
+                    <form action="/blogs/reviews/{{blog._id}}" method="GET">
+                        <button class="btn btn-outline-info" type="submit">Reviews</button>
+                    </form>
+                    <p></p>
+                    <div class="row">
+                        <div class="col">
+                            <form action="/blogs/edit/{{blog._id}}" method="GET">
+                                <button class="btn btn-warning" type="submit">Edit</button>
+                            </form> 
+                        </div>
+                        <div class="col">
+                            <form action="/blogs/delete/{{blog._id}}" method="GET">
+                                <button class="btn btn-danger" type="submit">delete</button>
+                            </form> 
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

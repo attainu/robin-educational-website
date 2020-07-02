@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blog Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="offset-md-4 col-md-4">
+                <h2>Educational Website</h2>
+                <hr>
+                {{#unless data}}
+                    {{#if admin}}
+                        <div class="alert alert-success">
+                            There is no reports today.
+                        </div>
+                    {{else}}
+                        <div class="alert alert-warning">
+                            Sorry!, There is no blogs related to your search.
+                        </div>
+                    {{/if}}
+                {{/unless}}
+                {{#if data}}
+                    <ul class="list-group list-group-flush">
+                        {{#each data}}
+                            <li class="list-group-item">
+                                {{#if ../admin}}
+                                    <a href="https://evening-reef-13907.herokuapp.com/admins/blog-search?blog={{this._id}}">{{this.title}}</a>
+                                {{else}}
+                                    <a href="https://evening-reef-13907.herokuapp.com/blog-search?blog={{this._id}}">{{this.title}}</a>
+                                {{/if}}
+                                <h6>by - {{this.createdBy.name}}</h6>
+                            </li>
+                        {{/each}}
+                    </ul>
+                    <p></p>
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            {{#if firstPage}}
+                                <li class="page-item disabled">
+                            {{else}}
+                                <li class="page-item">
+                            {{/if}}
+                                    <a class="page-link" href="https://evening-reef-13907.herokuapp.com/search?page={{prevPage}}" tabindex="-1">Previous</a>
+                                </li>
+                            {{#if endPage}}
+                                <li class="page-item disabled">
+                            {{else}}
+                                <li class="page-item">
+                            {{/if}}
+                                    <a class="page-link" href="https://evening-reef-13907.herokuapp.com/search?page={{nextPage}}">Next</a>
+                                </li>
+                        </ul>
+                    </nav>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

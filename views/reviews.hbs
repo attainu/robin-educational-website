@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>reviews</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="offset-md-4 col-md-4">
+                <h3>{{title}}</h3>
+                <hr>
+                <h2>reviews</h2>
+                {{#if error}}
+                <div class="alert alert-danger">
+                    {{msg}}
+                </div>
+                {{/if}}
+                {{#if user}}
+                <div class="row">
+                    <div class="col">
+                        <form action="/reviews/create/{{blogID}}" method="POST">
+                            <label for="review">
+                                <input class="form-control" type="text" name="review" id="review" placeholder="Give Review" required>
+                            </label>
+                            <button class="btn btn-warning" type="submit">submit</button>
+                        </form> 
+                    </div>
+                </div>
+                {{/if}}
+                <p></p>
+                <hr>
+                {{#if reviews}}
+                    <ul class="list-group list-group-flush">
+                        {{#each reviews}}
+                            <li class="list-group-item">
+                                <h5>{{this.review}}</h5>
+                                <p>by - {{this.createdBy}}</p>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
